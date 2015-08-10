@@ -1,19 +1,13 @@
-defaultTasks 'build'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath "nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0"
-    }
+plugins {
+    id "com.github.hierynomus.license" version "0.11.0"
+    id "com.xebialabs.xldp" version "1.0.5"
 }
+
+defaultTasks 'build'
 
 version='5.0.0-SNAPSHOT'
 
 def apiVersion = '2014.7.7'
-
-apply plugin: "com.github.hierynomus.license"
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
@@ -21,7 +15,6 @@ apply plugin: 'eclipse'
 license {
     header rootProject.file('src/main/license/xebialabs_community.license')
     strictCheck true
-    exclude('sample_dars/*')
 }
 
 repositories {
@@ -36,6 +29,12 @@ repositories {
     }
 }
 
+configurations {
+    distBundle {
+        transitive = false
+    }
+}
+
 dependencies {
     compile "com.xebialabs.deployit:udm-plugin-api:$apiVersion"
     compile "com.xebialabs.deployit:engine-spi:$apiVersion"
@@ -46,15 +45,8 @@ dependencies {
     testCompile "org.python:jython-standalone:2.5.3"
     testCompile "junit:junit:4.12"
     testCompile 'org.hamcrest:hamcrest-all:1.3'
-}
 
-import org.apache.tools.ant.filters.*
-
-processResources {
-    filter ReplaceTokens, tokens: [
-            "project.version": project.property("version"),
-            "project.artifactId": project.property("name")
-    ]
+    distBundle 'com.xebialabs.overthere:overtherepy:0.0.3'
 }
 
 
