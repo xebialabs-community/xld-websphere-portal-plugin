@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!--
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
+    FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
+
+-->
+<rules xmlns="http://www.xebialabs.com/xl-deploy/xl-rules">
+
+    <rule name="WebspherePortal_ExecuteXmlAccess" scope="deployed">
+        <conditions>
+            <type>wp.ExecutedXmlAccessInlineScriptPair</type>
+            <type>wp.ExecutedXmlAccessScriptPair</type>
+            <operation>CREATE</operation>
+            <operation>MODIFY</operation>
+            <operation>DESTROY</operation>
+        </conditions>
+        <planning-script-path>was/portal/planning/execute-xmlaccess-rule.py</planning-script-path>
+    </rule>
+
+    <rule name="WebspherePortal_WarCreate" scope="deployed">
+        <conditions>
+            <type>wp.WarModule</type>
+            <operation>CREATE</operation>
+        </conditions>
+        <steps>
+            <jython>
+                <description expression="true">"Register portlets contained in %s with %s" % (deployed.name, deployed.container.name)</description>
+                <script>was/portal/war/register-portlets-for-war.py</script>
+                <order>72</order>
+            </jython>
+        </steps>
+    </rule>
+
+    <rule name="WebspherePortal_WarDestroy" scope="deployed">
+        <conditions>
+            <type>wp.WarModule</type>
+            <operation>DESTROY</operation>
+        </conditions>
+        <steps>
+            <jython>
+                <description expression="true">"Undeploy portlets contained in %s from %s" % (delta.previous.name, delta.previous.container.name)</description>
+                <script>was/portal/war/deregister-portlets-for-war.py</script>
+                <order>28</order>
+                <jython-context>
+                    <deployed expression="true">delta.previous</deployed>
+                </jython-context>
+            </jython>
+        </steps>
+    </rule>
+
+    <rule name="WebspherePortal_WarModify" scope="deployed">
+        <conditions>
+            <type>wp.WarModule</type>
+            <operation>MODIFY</operation>
+        </conditions>
+        <steps>
+            <jython>
+                <description expression="true">"Update portlets contained in %s on %s" % (deployed.name, deployed.container.name)</description>
+                <script>was/portal/war/modify-portlets-for-war.py</script>
+                <order>72</order>
+                <jython-context>
+                    <deployed expression="true">delta.deployed</deployed>
+                    <previous_deployed expression="true">delta.previous</previous_deployed>
+                </jython-context>
+            </jython>
+        </steps>
+    </rule>
+
+
+    <!-- Rule used to workaround DEPL-8614 -->
+    <rule name="WebspherePortal_WarModify_StartApplication" scope="deployed">
+        <conditions>
+            <type>wp.WarModule</type>
+            <operation>MODIFY</operation>
+            <expression>str(deployed.restartStrategy) == "STOP_START" or str(deployed.restartStrategy) == "START"</expression>
+        </conditions>
+        <steps>
+            <wsadmin>
+                <order expression="true">deployed.startOrder</order>
+                <description expression="true">"%s %s on %s" % (deployed.startVerb, deployed.name, deployed.container.name)</description>
+                <script expression="true">deployed.startScript</script>
+                <upload-artifacts-in-python-context>false</upload-artifacts-in-python-context>
+            </wsadmin>
+        </steps>
+    </rule>
+
+    <!-- Rule used to workaround DEPL-8614 -->
+    <rule name="WebspherePortal_WarModify__StopApplication" scope="deployed">
+        <conditions>
+            <type>wp.WarModule</type>
+            <operation>MODIFY</operation>
+            <expression>str(deployed.restartStrategy) == "STOP_START" or str(deployed.restartStrategy) == "STOP"</expression>
+        </conditions>
+        <steps>
+            <wsadmin>
+                <order expression="true">deployed.stopOrder</order>
+                <description expression="true">"%s %s on %s" % (deployed.stopVerb, deployed.name, deployed.container.name)</description>
+                <script expression="true">deployed.stopScript</script>
+                <upload-artifacts-in-python-context>false</upload-artifacts-in-python-context>
+            </wsadmin>
+        </steps>
+    </rule>
+
+</rules>
