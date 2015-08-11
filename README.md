@@ -118,6 +118,23 @@ The types also allow the user to supply an optional rollback xmlaccess script th
 
 Both types have the same functionality except for the location of the xmlaccess script to execute. __wp.XmlAccessInlineScriptPair__ defines the script as a property on the configuration item, whereas __wp.XmlAccessScriptPair__ is an artifact folder containing the files to execute.
 
+### wp.XmlAccessInlineScriptPair ###
+A resource containing inline XmlAccess scripts that are used for deployment and rollback.
+
+| Property | Description | 
+| -------- | ----------- |
+| applyScript | XmlAccess to execute on deployment |
+| unapplyScript | XmlAccess to execute on rollback. Should undo what the apply script did.|
+
+### wp.XmlAccessScriptPair ###
+
+A folder containing 2 XmlAccess files that are used for deployment and rollback.
+
+| Property | Description | 
+| -------- | ----------- |
+| applyScript | Name of XmlAccess file in folder to execute on deployment |
+| unapplyScript | Name of XmlAccess file in folder to execute on rollback. Should undo what the apply file did.|   
+
 ### Sample deployit-manifest.xml ###
 
 ``` xml
