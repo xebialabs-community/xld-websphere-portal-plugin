@@ -5,7 +5,7 @@ plugins {
 
 defaultTasks 'build'
 
-version='5.0.0-rc1'
+version='5.0.0-SNAPSHOT'
 
 def apiVersion = '2014.7.7'
 apply plugin: 'java'
