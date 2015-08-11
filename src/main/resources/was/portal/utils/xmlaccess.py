@@ -8,7 +8,7 @@ from __future__ import with_statement
 import sys
 import xml.etree.ElementTree as ET
 import xml.dom.minidom
-from overtherepy import OverthereHostSession
+from overtherepy import OverthereHostSession, StringUtils
 
 class ChangeSet(object):
 
@@ -235,9 +235,19 @@ class XmlAccess(object):
         self.exec_context.logOutput('-' * 80)
 
     def log_xml(self, xml_to_print):
-        dom = xml.dom.minidom.parseString(xml_to_print)
+        if XmlAccess.not_empty(xml_to_print):
+            dom = xml.dom.minidom.parseString(xml_to_print)
+            self.exec_context.logOutput(dom.toprettyxml(indent="  "))
+        else:
+            self.log("EMPTY")
+
+    def log_with_header(self, header, body, is_xml=False):
+        self.log(header)
         self.log_linebreak()
-        self.exec_context.logOutput(dom.toprettyxml(indent="  "))
+        if is_xml:
+            self.log_xml(body)
+        else:
+            self.log(body)
         self.log_linebreak()
 
     def get_portlet_object_ids(self, portal_app_uid):
@@ -286,11 +296,9 @@ class XmlAccess(object):
         self.execute_and_log_input_output(req_xml)
 
     def execute_and_log_input_output(self, xmlaccessscript):
-        self.log("The following xml will be used as input into XmlAccess :")
-        self.log_xml(xmlaccessscript)
+        self.log_with_header("The following xml will be used as input into XmlAccess :", xmlaccessscript, True)
         res_xml = self.execute(xmlaccessscript)
-        self.log("XML Access executed successfully. Output :")
-        self.log_xml(res_xml)
+        self.log_with_header("XML Access executed successfully. Output :", res_xml, True)
         return res_xml
 
     def execute(self, xmlaccessscript):
@@ -308,8 +316,12 @@ class XmlAccess(object):
                 response_xml = session.read_file(response_file.path)
 
             if resp.rc != 0:
-                self.exec_context.logError("XML Access failed!!! Output :")
-                self.log_xml(response_xml)
+                self.exec_context.logError("XML Access failed!!!")
+                self.log_with_header("XML Access response:", response_xml, True)
+                self.log_with_header("Standard out", StringUtils.concat(resp.stdout))
+                self.log_with_header("Standard error", StringUtils.concat(resp.stderr))
+                cmd_line[4] = '******'  # Password is 5th element in array
+                self.log_with_header("Executed command line", StringUtils.concat(cmd_line, " "))
                 sys.exit(1)
             return response_xml
 
