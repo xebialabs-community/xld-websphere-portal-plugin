@@ -17,4 +17,4 @@ else:
     xml = req_xml
 
 rendered_xml = TemplateRenderer().render(xml, {'deployed': deployed})
-xmlaccess.execute_and_log_input_output(rendered_xml)
+xmlaccess.execute_and_log_input_output(rendered_xml, config_uri=deployed.configUri)

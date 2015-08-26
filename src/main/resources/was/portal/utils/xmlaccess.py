@@ -295,20 +295,31 @@ class XmlAccess(object):
         req_xml = XmlAccess.generate_deregister_portlets_xml(deployed)
         self.execute_and_log_input_output(req_xml)
 
-    def execute_and_log_input_output(self, xmlaccessscript):
+    def resolve_config_url(self, config_uri):
+        wp_url = self.wp_url
+        if config_uri and len(config_uri.strip()) > 0:
+            config_uri = config_uri.strip()
+            if config_uri[0] != '/':
+                wp_url = wp_url + '/' + config_uri
+            else:
+                wp_url = wp_url + config_uri
+        return wp_url
+
+    def execute_and_log_input_output(self, xmlaccessscript, config_uri=None):
         self.log_with_header("The following xml will be used as input into XmlAccess :", xmlaccessscript, True)
-        res_xml = self.execute(xmlaccessscript)
+        res_xml = self.execute(xmlaccessscript, config_uri)
         self.log_with_header("XML Access executed successfully. Output :", res_xml, True)
         return res_xml
 
-    def execute(self, xmlaccessscript):
+    def execute(self, xmlaccessscript, config_uri=None):
         session = OverthereHostSession(self.host, stream_command_output=False, execution_context=self.exec_context)
         with session:
             request_file = session.upload_text_content_to_work_dir(xmlaccessscript, "request.xml")
             response_file = session.work_dir_file("response.xml")
             fs = session.os.fileSeparator
             executable = "%s%sbin%sxmlaccess%s" % (self.wp_home, fs, fs, session.os.scriptExtension)
-            cmd_line = [executable, "-user", self.wp_user, "-password", self.wp_password, "-url", self.wp_url]
+            wp_url = self.resolve_config_url(config_uri)
+            cmd_line = [executable, "-user", self.wp_user, "-password", self.wp_password, "-url", wp_url]
             cmd_line.extend(["-in", request_file.path, "-out", response_file.path])
             resp = session.execute(cmd_line, check_success=False)
             response_xml = ""

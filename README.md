@@ -125,6 +125,7 @@ A resource containing inline XmlAccess scripts that are used for deployment and 
 | -------- | ----------- |
 | applyScript | XmlAccess to execute on deployment |
 | unapplyScript | XmlAccess to execute on rollback. Should undo what the apply script did.|
+| configUri | Uri to be appended to the wpConfigUrl defined on the container. Used when applying xmlaccess to a virtual portal. Example if the wpConfigUrl is _http://localhost:10039/wps/config_ and this property is set to _sp_, then final config url will be _http://localhost:10039/wps/config/sp_|
 
 ### wp.XmlAccessScriptPair ###
 
@@ -134,6 +135,8 @@ A folder containing 2 XmlAccess files that are used for deployment and rollback.
 | -------- | ----------- |
 | applyScript | Name of XmlAccess file in folder to execute on deployment |
 | unapplyScript | Name of XmlAccess file in folder to execute on rollback. Should undo what the apply file did.|   
+| configUri | Uri to be appended to the wpConfigUrl defined on the container. Used when applying xmlaccess to a virtual portal. Example if the wpConfigUrl is _http://localhost:10039/wps/config_ and this property is set to _sp_, then final config url will be _http://localhost:10039/wps/config/sp_|
+
 
 ### Sample deployit-manifest.xml ###
 

@@ -54,6 +54,7 @@
     <type type="wp.ExecutedXmlAccessInlineScriptPair" extends="udm.BaseDeployed" deployable-type="wp.XmlAccessInlineScriptPair" container-type="was.WasAppContainer"
           description="A resource containing inline XmlAccess scripts that are used for deployment and rollback">
         <generate-deployable type="wp.XmlAccessInlineScriptPair" extends="udm.BaseDeployable"/>
+        <property name="configUri" required="false" description="Uri to be appended to the wpConfigUrl defined on the container. Used when applying xmlaccess to a virtual portal"/>
         <property name="applyScript" size="large" description="XmlAccess to execute on deployment"/>
         <property name="unapplyScript" size="large" description="XmlAccess to execute on rollback. Should undo what the apply script did." required="false"/>
     </type>
@@ -61,6 +62,7 @@
     <type type="wp.ExecutedXmlAccessScriptPair" extends="udm.BaseDeployedArtifact" deployable-type="wp.XmlAccessScriptPair" container-type="was.WasAppContainer"
             description="A folder containing 2 XmlAccess files that are used for deployment and rollback">
         <generate-deployable type="wp.XmlAccessScriptPair" extends="udm.BaseDeployableFolderArtifact"/>
+        <property name="configUri" required="false" description="Uri to be appended to the wpConfigUrl defined on the container. Used when applying xmlaccess to a virtual portal"/>
         <property name="applyScript" description="Name of XmlAccess file in folder to execute on deployment"/>
         <property name="unapplyScript" description="Name of XmlAccess file in folder to execute on rollback. Should undo what the apply file did." required="false"/>
     </type>
