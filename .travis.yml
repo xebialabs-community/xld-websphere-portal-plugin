@@ -7,7 +7,7 @@ deploy:
   provider: releases
   api_key:
     secure: EqdJTrbN1HPqzIu69R3KXWU95u183aLGZrsRx0sXXQkf1+UbMjNwttcStBSRLcHq0+dRhz5PPuiSsuNRpV9QSMRFmx8mzJVoLrvoEFAy7se8OocDY2Pkys1SwaGJ0Z/UbbbE019YUDHDUFoIBTNwT9qcGDaN0c9npw0ym1r/FK7OXYhXoeuw6GqqFLf6O8wpcKep1stJ3RifOaJ8DpMuZXdRB5rjG+67IsFBZfoTNwm7orITNl9HS4DgqKPVu4Q3ZOuNUtHE+NNdTUnswdRmyCqKEm9rVLMChlb8rIurpIJnnmKZE1VOrCtEgd1SnkG3Qv8Bq/hmLjwBAJ1gxDIBMyCAh6JJ1zmM+uv2YSAIugnj4856lASWlzMYwHUAfjsOchjifq8zHXdr08XhoAj+QWctKlzpvsP4G2JJohXkXwJNJbk+XlWV7H+IoXLvj9COL5JUscbkvrvWmhMTgdkvE8iZPC2JC/p9YV9pmWU+vSyVI8FOvUWOqHw6AzT1VMUxvOxOdUDMSYkGos7Z+0V5W/Iwp+/s1GjmOlBJkZoUcmfDnZfqFa1wqg45EZic0mP1Cl5RHhrsucqHSps2PNf1CQZdpub3sgVo+nVa7SsoTJfVuxRxiWsqVV/I/7glIOcVdCGO5i/Dg3GtA5llG7Wu0LJZ3JT++s9Gej2R0aVbiQw=
-  file: build/distributions/xld-websphere-portal-plugin-5.0.0-rc1.xldp
+  file: build/distributions/xld-websphere-portal-plugin-5.0.0-rc2.xldp
   on:
     all_branches: true
     tags: true
