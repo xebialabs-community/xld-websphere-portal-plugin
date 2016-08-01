@@ -56,8 +56,8 @@ class XmlAccess(object):
         self.host = host
 
     @staticmethod
-    def new_instance_from_container(exec_context, container):
-        return XmlAccess(exec_context, container.host, container.wpHome, container.wpAdminUsername, container.wpAdminPassword, container.wpConfigUrl)
+    def new_instance_from_container(exec_context, container, portalHost):
+        return XmlAccess(exec_context, portalHost, container.wpHome, container.wpAdminUsername, container.wpAdminPassword, container.wpConfigUrl)
 
     @staticmethod
     def determine_war_installation_url(deployed):
@@ -314,7 +314,7 @@ class XmlAccess(object):
     def execute(self, xmlaccessscript, config_uri=None):
         session = OverthereHostSession(self.host, stream_command_output=False, execution_context=self.exec_context)
         with session:
-            request_file = session.upload_text_content_to_work_dir(xmlaccessscript, "request.xml")
+            request_file = session.upload_text_content_to_work_dir(xmlaccessscript, z"request.xml")
             response_file = session.work_dir_file("response.xml")
             fs = session.os.fileSeparator
             executable = "%s%sbin%sxmlaccess%s" % (self.wp_home, fs, fs, session.os.scriptExtension)

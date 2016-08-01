@@ -8,7 +8,7 @@ from was.portal.utils.xmlaccess import XmlAccess
 from was.portal.utils.template import TemplateRenderer
 from com.xebialabs.overthere.util import OverthereUtils
 
-xmlaccess = XmlAccess.new_instance_from_container(context, deployed.container.cell)
+xmlaccess = XmlAccess.new_instance_from_container(context, deployed.container.cell, deployed.container.cell.portalHost)
 
 if is_file:
     req_file = deployed.file.getFile(req_xml)
