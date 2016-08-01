@@ -81,7 +81,7 @@
         <property name="wpAdminUsername" label="Administrative user" description="Username of the administrative user." category="Portal" required="false"/>
         <property name="wpAdminPassword" label="Administrative password" description="Password of the administrative user." category="Portal" required="false" password="true"/>
         <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
-        <property name="portalHost" label="Portal Host" description="The host xml access is on." category="Portal" required="true"/>
+        <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="true"/>
 
 
         <property name="installedAppDir" default="installedApps" hidden="true" description="The install applications directory under the profile" category="Portal"/>
