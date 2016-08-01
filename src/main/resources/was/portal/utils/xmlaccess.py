@@ -314,7 +314,7 @@ class XmlAccess(object):
     def execute(self, xmlaccessscript, config_uri=None):
         session = OverthereHostSession(self.host, stream_command_output=False, execution_context=self.exec_context)
         with session:
-            request_file = session.upload_text_content_to_work_dir(xmlaccessscript, z"request.xml")
+            request_file = session.upload_text_content_to_work_dir(xmlaccessscript, "request.xml")
             response_file = session.work_dir_file("response.xml")
             fs = session.os.fileSeparator
             executable = "%s%sbin%sxmlaccess%s" % (self.wp_home, fs, fs, session.os.scriptExtension)
