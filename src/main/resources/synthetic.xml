@@ -83,6 +83,7 @@
         <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
         <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="true"/>
 
+        <property name="wpProfileLocation" label="Portal Profile Home" description="The location of the portal war file." category="Portal" required="false"/>
 
         <property name="installedAppDir" default="installedApps" hidden="true" description="The install applications directory under the profile" category="Portal"/>
 

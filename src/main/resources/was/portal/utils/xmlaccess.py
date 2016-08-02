@@ -63,7 +63,10 @@ class XmlAccess(object):
     def determine_war_installation_url(deployed):
         war_file = deployed.file.name
         c = deployed.container
-        war_install_location = "%s/%s/%s/%s.ear/%s" % (c.cell.wasHome, c.cell.installedAppDir, c.cellName, deployed.name, war_file)
+        if c.cell.portalHost:
+            war_install_location = "%s/%s/%s/%s.ear/%s" % (c.cell.wpProfileLocation, c.cell.installedAppDir, c.cellName, deployed.name, war_file)
+        else:
+            war_install_location = "%s/%s/%s/%s.ear/%s" % (c.cell.wasHome, c.cell.installedAppDir, c.cellName, deployed.name, war_file)
         war_install_location = war_install_location.replace("\\", "/")
         war_install_location = deployed.warInstallLocationPrefix + war_install_location
         return war_install_location
