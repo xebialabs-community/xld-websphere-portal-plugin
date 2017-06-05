@@ -1,4 +1,17 @@
 # XLD Websphere Portal Plugin
+
+## CI status ##
+
+[![Build Status][xld-websphere-portal-plugin-travis-image]][xld-websphere-portal-plugin-travis-url]
+[![License: MIT][xld-websphere-portal-plugin-license-image]][xld-websphere-portal-plugin-license-url]
+![Github All Releases][xld-websphere-portal-plugin-downloads-image]
+
+[xld-websphere-portal-plugin-travis-image]: https://travis-ci.org/xebialabs-community/xld-websphere-portal-plugin.svg?branch=master
+[xld-websphere-portal-plugin-travis-url]: https://travis-ci.org/xebialabs-community/xld-websphere-portal-plugin
+[xld-websphere-portal-plugin-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
+[xld-websphere-portal-plugin-license-url]: https://opensource.org/licenses/MIT
+[xld-websphere-portal-plugin-downloads-image]: https://img.shields.io/github/downloads/xebialabs-community/xld-websphere-portal-plugin/total.svg
+
 ## Preface ##
 
 This document describes the functionality provided by the IBM WebSphere Portal (WP) plugin.

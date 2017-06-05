@@ -1,20 +1,31 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 plugins {
-    id "com.github.hierynomus.license" version "0.11.0"
+    id "com.github.hierynomus.license" version "0.13.1"
     id "com.xebialabs.xldp" version "1.0.5"
 }
 
 defaultTasks 'build'
 
-version='5.0.0-rc4'
+version='5.0.0-rc5'
 
 def apiVersion = '2014.7.7'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'eclipse'
 
+processResources.configure {
+  filter ReplaceTokens, tokens: [
+    'project.version': version.toString(),
+    'project.name'   : rootProject.name
+  ]
+}
+
 license {
-    header rootProject.file('src/main/license/xebialabs_community.license')
-    strictCheck true
+  header rootProject.file('License.md')
+  strictCheck false
+  ext.year = Calendar.getInstance().get(Calendar.YEAR)
+  ext.name = 'XEBIALABS'
 }
 
 repositories {
@@ -44,5 +55,3 @@ dependencies {
 
     distBundle 'com.xebialabs.overthere:overtherepy:0.0.3'
 }
-
-
