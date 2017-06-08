@@ -3,11 +3,17 @@
 ## CI status ##
 
 [![Build Status][xld-websphere-portal-plugin-travis-image]][xld-websphere-portal-plugin-travis-url]
+[![Codacy][xld-websphere-portal-plugin-codacy-image] ][xld-websphere-portal-plugin-codacy-url]
+[![Code Climate][xld-websphere-portal-plugin-code-climate-image] ][xld-websphere-portal-plugin-code-climate-url]
 [![License: MIT][xld-websphere-portal-plugin-license-image]][xld-websphere-portal-plugin-license-url]
 ![Github All Releases][xld-websphere-portal-plugin-downloads-image]
 
 [xld-websphere-portal-plugin-travis-image]: https://travis-ci.org/xebialabs-community/xld-websphere-portal-plugin.svg?branch=master
 [xld-websphere-portal-plugin-travis-url]: https://travis-ci.org/xebialabs-community/xld-websphere-portal-plugin
+[xld-websphere-portal-plugin-codacy-image]: https://api.codacy.com/project/badge/Grade/28340ed9e96a4d84a05965d2eef307d4
+[xld-websphere-portal-plugin-codacy-url]: https://www.codacy.com/app/joris-dewinne/xld-websphere-portal-plugin
+[xld-websphere-portal-plugin-code-climate-image]: https://codeclimate.com/github/xebialabs-community/xld-websphere-portal-plugin/badges/gpa.svg
+[xld-websphere-portal-plugin-code-climate-url]: https://codeclimate.com/github/xebialabs-community/xld-websphere-portal-plugin
 [xld-websphere-portal-plugin-license-image]: https://img.shields.io/badge/License-MIT-yellow.svg
 [xld-websphere-portal-plugin-license-url]: https://opensource.org/licenses/MIT
 [xld-websphere-portal-plugin-downloads-image]: https://img.shields.io/github/downloads/xebialabs-community/xld-websphere-portal-plugin/total.svg
