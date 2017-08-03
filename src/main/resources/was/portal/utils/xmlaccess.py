@@ -154,11 +154,12 @@ class XmlAccess(object):
     @staticmethod
     def add_parameter_elems(new_prefs, remove_prefs, portlet_elm):
         for pref_key, pref_val in new_prefs.items():
-            param_elm = ET.SubElement(portlet_elm, "parameter", {"name": pref_key, "type": "string", "update": "set"})
-            param_elm.text = pref_val
+            param_elm = ET.SubElement(portlet_elm, "preferences", {"name": pref_key, "update": "set"})
+            value_elm = ET.SubElement(param_elm, "value")
+            value_elm.text = pref_val
 
         for pref_key in remove_prefs:
-            ET.SubElement(portlet_elm, "parameter", {"name": pref_key, "type": "string", "update": "remove"})
+            ET.SubElement(portlet_elm, "preferences", {"name": pref_key, "update": "remove"})
 
     @staticmethod
     def add_unique_name_attr(portlet, portlet_elm):
