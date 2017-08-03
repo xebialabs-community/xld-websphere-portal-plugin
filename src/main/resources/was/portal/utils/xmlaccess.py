@@ -43,7 +43,7 @@ class ChangeSet(object):
 
 class XmlAccess(object):
 
-    REQUEST_XML = '<request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PortalConfig_1.4.xsd">' \
+    REQUEST_XML = '<request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PortalConfig_6.1.0.xsd">' \
                   '<portal action="locate"></portal></request>'
 
     def __init__(self, exec_context, host, wp_home, wp_user, wp_password, wp_url):
@@ -177,15 +177,37 @@ class XmlAccess(object):
         XmlAccess._add_text_elm(web_app_elm, "context-root", deployed.contextRoot)
         XmlAccess._add_text_elm(web_app_elm, "display-name", deployed.name)
 
+        # First add servlets needed for possible cloning
+        for portlet_ci in deployed.portlets:
+                ET.SubElement(web_app_elm, 'servlet', {'action': "update", "active": "true", "remote-cache-dynamic" : "false",
+                                                       "name":  portlet_ci.portletName, "objectid": portlet_ci.portletName})
+
+        # Create the portal-app
         uid = XmlAccess.get_webmod_uid(deployed)
         portlet_app_elm = ET.SubElement(web_app_elm, 'portlet-app',
                                         {'action': "update", "active": "true", "uid": uid, "name": deployed.portalAppName})
 
+        # Add all portlets
         for portlet_ci in deployed.portlets:
             portlet_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "name": portlet_ci.portletName})
             XmlAccess.add_unique_name_attr(portlet_ci, portlet_elm)
             XmlAccess.add_parameter_elems(portlet_ci.preferences, [], portlet_elm)
             XmlAccess.add_access_control_elm(portlet_ci, portlet_elm)
+
+            # Loop all portlet clones clones
+            for portlet_clone_ci in portlet_ci.clones:
+                portlet_clone_ci_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "defaultlocale": portlet_clone_ci.defaultlocale, "name": portlet_ci.portletName + ".$cloned." + portlet_clone_ci.cloneName, "servletref": portlet_ci.portletName})
+
+                for localedata_ci in portlet_clone_ci.localedata:
+                    # Add locale data
+                    localedata_elm = ET.SubElement(portlet_clone_ci_elm, 'localedata', {'locale': localedata_ci.locale})
+                    XmlAccess._add_text_elm(localedata_elm, 'title', localedata_ci.title)
+                    XmlAccess._add_text_elm(localedata_elm, 'description', localedata_ci.description)
+                    XmlAccess._add_text_elm(localedata_elm, 'keywords', "${portlet.keywords}")
+
+                XmlAccess.add_unique_name_attr(portlet_clone_ci, portlet_clone_ci_elm)
+                XmlAccess.add_parameter_elems(portlet_clone_ci.preferences, [], portlet_clone_ci_elm)
+                XmlAccess.add_access_control_elm(portlet_clone_ci, portlet_clone_ci_elm)
 
         return ET.tostring(root, encoding="UTF-8")
 
