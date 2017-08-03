@@ -16,21 +16,68 @@
     <type type="wp.War" extends="was.War" description="JSR Portal WAR archive">
         <property name="portalAppName" label="Portal Application Name" description="Name for this portal application" category="Portal"/>
         <property name="portalAppUid" label="Portal Application Identifier"
-                  description="Unique identifier for this portal application as defined in the portal.xml" category="Portal"/>
+                  description="Unique identifier for this portal application as defined in the portlet.xml" category="Portal"/>
         <property name="portalAppConcreteUid" required="false" label="Concrete Portal Application Identifier"
-                  description="Required when deploying a IBM-API type portlet. Concrete Unique identifier for this portal application as defined in the portal.xml"
+                  description="Required when deploying a IBM-API type portlet. Concrete Unique identifier for this portal application as defined in the portlet.xml"
                   category="Portal"/>
         <property name="portlets" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletSpec" label="Portlets" category="Portal"
                   description="List of portlets to register."/>
     </type>
-
-    <!-- Deployeds -->
-    <type type="wp.Portlet" extends="udm.BaseEmbeddedDeployed" deployable-type="wp.PortletSpec" container-type="wp.WarModule" description="Deployed portlet to WebSphere Portal runtime.">
-        <generate-deployable type="wp.PortletSpec" extends="udm.BaseEmbeddedDeployable"/>
-
-        <property name="portletName" description="Name of the portlet as described in the portal.xml"/>
+    <type type="wp.PortletSpec" extends="udm.BaseEmbeddedDeployable" description="Portlet spec">
+        <property name="portletName" description="Name of the portlet (portlet-name) as described in the portlet.xml"/>
         <property name="uniqueName" description="Unique name for portlet" required="false"/>
         <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
+        <property name="clones" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneSpec" label="Clones" description="List of portlet clones to register."/>
+
+        <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
+                  description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
+            <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
+        </property>
+        <property name="groupAclMapping" kind="map_string_string" required="false" category="Security"
+                  description="List of Group ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
+            <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
+        </property>
+    </type>
+    <type type="wp.PortletCloneSpec" extends="udm.BaseEmbeddedDeployable" description="Portlet clone spec">
+        <property name="cloneName" description="Name of the portlet clone"/>
+        <property name="uniqueName" description="Unique name for portlet" required="false"/>
+        <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
+        <property name="defaultlocale" description="Default locale, needs to be in the localedata list." required="true"/>
+        <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleDataSpec" label="localedata" description="Locale data, one is mandetory and specified as default."/>
+
+        <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
+                  description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
+            <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
+        </property>
+        <property name="groupAclMapping" kind="map_string_string" required="false" category="Security"
+                  description="List of Group ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
+            <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
+        </property>
+    </type>
+    <type type="wp.PortletCloneLocaleDataSpec" extends="udm.BaseEmbeddedDeployable" description="Portlet clone locale spec">
+        <property name="locale" description="locale of the name, description and keywords"/>
+        <property name="title" description="Portlet title in specified locale" required="true"/>
+        <property name="description" description="Portlet description in specified locale" required="false"/>
+        <property name="keywords" description="Portlet keywords in specified locale" required="false"/>
+    </type>
+
+    <!-- Deployeds -->
+    <type type="wp.WarModule" extends="was.WarModule" deployable-type="wp.War" container-type="was.WasAppContainer" description="WAR with values configured for a deployment.">
+        <property name="portalAppName" label="Portal Application Name" description="Name for this portal application" category="Portal"/>
+        <property name="portalAppUid" label="Portal Application Identifier" description="Unique identifier for this portal application as defined in the portlet.xml" category="Portal"/>
+        <property name="portalAppConcreteUid" required="false" label="Concrete Portal Application Identifier"
+                  description="Required when deploying a IBM-API type portlet. Concrete Unique identifier for this portal application as defined in the portlet.xml" category="Portal"/>
+        <property name="portlets" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.Portlet" label="Portlets" category="Portal" description="List of portlets to register."/>
+
+        <property name="modifyScript" hidden="true" required="false" default="was/portal/application/update-application.py"/>
+        <property name="warInstallLocationPrefix" hidden="true" required="false" default="file://localhost/"/>
+    </type>
+
+    <type type="wp.Portlet" extends="udm.BaseEmbeddedDeployed" deployable-type="wp.PortletSpec" container-type="wp.WarModule" description="Deployed portlet to WebSphere Portal runtime.">
+        <property name="portletName" description="Name of the portlet (portlet-name) as described in the portlet.xml"/>
+        <property name="uniqueName" description="Unique name for portlet" required="false"/>
+        <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
+        <property name="clones" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletClone" label="Clones" description="List of portlet clones to register."/>
 
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
                   description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
@@ -44,15 +91,30 @@
         <property name="subjectDelimiter" hidden="true" default="|"/>
     </type>
 
-    <type type="wp.WarModule" extends="was.WarModule" deployable-type="wp.War" container-type="was.WasAppContainer" description="WAR with values configured for a deployment.">
-        <property name="portalAppName" label="Portal Application Name" description="Name for this portal application" category="Portal"/>
-        <property name="portalAppUid" label="Portal Application Identifier" description="Unique identifier for this portal application as defined in the portal.xml" category="Portal"/>
-        <property name="portalAppConcreteUid" required="false" label="Concrete Portal Application Identifier"
-                  description="Required when deploying a IBM-API type portlet. Concrete Unique identifier for this portal application as defined in the portal.xml" category="Portal"/>
-        <property name="portlets" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.Portlet" label="Portlets" category="Portal" description="List of portlets to register."/>
+    <type type="wp.PortletClone" extends="udm.BaseEmbeddedDeployed" deployable-type="wp.PortletCloneSpec" container-type="wp.Portlet" description="Deployed portlet clone to WebSphere Portal runtime.">
+        <property name="cloneName" description="Name of the portlet clone"/>
+        <property name="uniqueName" description="Unique name for portlet" required="false"/>
+        <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
+        <property name="defaultlocale" description="Default locale, needs to be in the localedata list." required="true"/>
+        <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleData" label="localedata" description="Locale data, one is mandetory and specified as default."/>
 
-        <property name="modifyScript" hidden="true" required="false" default="was/portal/application/update-application.py"/>
-        <property name="warInstallLocationPrefix" hidden="true" required="false" default="file://localhost/"/>
+        <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
+                  description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
+            <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
+        </property>
+        <property name="groupAclMapping" kind="map_string_string" required="false" category="Security"
+                  description="List of Group ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
+            <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
+        </property>
+        <property name="securityLevels" hidden="true" kind="set_of_string" default="user,privileged user,contributor,editor,manager,delegator,security administrator,administrator"/>
+        <property name="subjectDelimiter" hidden="true" default="|"/>
+    </type>
+
+    <type type="wp.PortletCloneLocaleData" extends="udm.BaseEmbeddedDeployed" deployable-type="wp.PortletCloneLocaleDataSpec" container-type="wp.PortletClone" description="Locales to give the portlet clone name and description. One is always needed.">
+        <property name="locale" description="locale of the name, description and keywords"/>
+        <property name="title" description="Portlet title in specified locale" required="true"/>
+        <property name="description" description="Portlet description in specified locale" required="false"/>
+        <property name="keywords" description="Portlet keywords in specified locale" required="false"/>
     </type>
 
     <type type="wp.ExecutedXmlAccessInlineScriptPair" extends="udm.BaseDeployed" deployable-type="wp.XmlAccessInlineScriptPair" container-type="was.WasAppContainer"
@@ -77,6 +139,8 @@
         <property name="wpAdminUsername" label="Administrative user" description="Username of the administrative user." category="Portal" required="false"/>
         <property name="wpAdminPassword" label="Administrative password" description="Password of the administrative user." category="Portal" required="false" password="true"/>
         <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
+        <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="true"/>
+        <property name="wpProfileLocation" label="Portal Profile Home" description="The location of the portal war file." category="Portal" required="false"/>         
         <property name="installedAppDir" default="installedApps" hidden="true" description="The install applications directory under the profile" category="Portal"/>
     </type-modification>
 
