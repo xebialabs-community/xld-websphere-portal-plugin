@@ -289,7 +289,7 @@ class XmlAccess(object):
                     localedata_elm = ET.SubElement(portlet_clone_ci_elm, 'localedata', {'locale': localedata_ci.locale})
                     XmlAccess._add_text_elm(localedata_elm, 'title', localedata_ci.title)
                     XmlAccess._add_text_elm(localedata_elm, 'description', localedata_ci.description)
-                    XmlAccess._add_text_elm(localedata_elm, 'keywords', "${portlet.keywords}")
+                    XmlAccess._add_text_elm(localedata_elm, 'keywords', localedata_ci.keywords)
 
                 XmlAccess.add_unique_name_attr(portlet_clone_ci, portlet_clone_ci_elm)
                 XmlAccess.add_parameter_elems(portlet_clone_ci.preferences, [], portlet_clone_ci_elm)
