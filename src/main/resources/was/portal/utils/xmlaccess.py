@@ -167,6 +167,24 @@ class XmlAccess(object):
             portlet_elm.set("uniquename", portlet.uniqueName)
 
     @staticmethod
+    def add_new_portlet_clones(portlet_app_elm, portlet_ci):
+        # Loop all portlet clones clones
+        for portlet_clone_ci in portlet_ci.clones:
+            portlet_clone_ci_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "defaultlocale": portlet_clone_ci.defaultlocale,
+                                                                              "name": portlet_ci.portletName + ".$cloned." + portlet_clone_ci.cloneName, "servletref": portlet_ci.portletName})
+
+            for localedata_ci in portlet_clone_ci.localedata:
+                # Add locale data
+                localedata_elm = ET.SubElement(portlet_clone_ci_elm, 'localedata', {'locale': localedata_ci.locale})
+                XmlAccess._add_text_elm(localedata_elm, 'title', localedata_ci.title)
+                XmlAccess._add_text_elm(localedata_elm, 'description', localedata_ci.description)
+                XmlAccess._add_text_elm(localedata_elm, 'keywords', localedata_ci.keywords)
+
+            XmlAccess.add_unique_name_attr(portlet_clone_ci, portlet_clone_ci_elm)
+            XmlAccess.add_parameter_elems(portlet_clone_ci.preferences, [], portlet_clone_ci_elm)
+            XmlAccess.add_access_control_elm(portlet_clone_ci, portlet_clone_ci_elm)
+
+    @staticmethod
     def generate_register_portlets_xml(deployed, war_installation_location):
         root = ET.fromstring(XmlAccess.REQUEST_XML)
         root.set("type", "update")
@@ -195,20 +213,7 @@ class XmlAccess(object):
             XmlAccess.add_parameter_elems(portlet_ci.preferences, [], portlet_elm)
             XmlAccess.add_access_control_elm(portlet_ci, portlet_elm)
 
-            # Loop all portlet clones clones
-            for portlet_clone_ci in portlet_ci.clones:
-                portlet_clone_ci_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "defaultlocale": portlet_clone_ci.defaultlocale, "name": portlet_ci.portletName + ".$cloned." + portlet_clone_ci.cloneName, "servletref": portlet_ci.portletName})
-
-                for localedata_ci in portlet_clone_ci.localedata:
-                    # Add locale data
-                    localedata_elm = ET.SubElement(portlet_clone_ci_elm, 'localedata', {'locale': localedata_ci.locale})
-                    XmlAccess._add_text_elm(localedata_elm, 'title', localedata_ci.title)
-                    XmlAccess._add_text_elm(localedata_elm, 'description', localedata_ci.description)
-                    XmlAccess._add_text_elm(localedata_elm, 'keywords', "${portlet.keywords}")
-
-                XmlAccess.add_unique_name_attr(portlet_clone_ci, portlet_clone_ci_elm)
-                XmlAccess.add_parameter_elems(portlet_clone_ci.preferences, [], portlet_clone_ci_elm)
-                XmlAccess.add_access_control_elm(portlet_clone_ci, portlet_clone_ci_elm)
+            XmlAccess.add_new_portlet_clones(portlet_app_elm, portlet_ci)
 
         return ET.tostring(root, encoding="UTF-8")
 
@@ -245,20 +250,7 @@ class XmlAccess(object):
             XmlAccess.add_parameter_elems(portlet_ci.preferences, [], portlet_elm)
             XmlAccess.add_access_control_elm(portlet_ci, portlet_elm)
 
-            # Loop all portlet clones clones
-            for portlet_clone_ci in portlet_ci.clones:
-                portlet_clone_ci_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "defaultlocale": portlet_clone_ci.defaultlocale, "name": portlet_ci.portletName + ".$cloned." + portlet_clone_ci.cloneName, "servletref": portlet_ci.portletName})
-
-                for localedata_ci in portlet_clone_ci.localedata:
-                    # Add locale data
-                    localedata_elm = ET.SubElement(portlet_clone_ci_elm, 'localedata', {'locale': localedata_ci.locale})
-                    XmlAccess._add_text_elm(localedata_elm, 'title', localedata_ci.title)
-                    XmlAccess._add_text_elm(localedata_elm, 'description', localedata_ci.description)
-                    XmlAccess._add_text_elm(localedata_elm, 'keywords', "${portlet.keywords}")
-
-                XmlAccess.add_unique_name_attr(portlet_clone_ci, portlet_clone_ci_elm)
-                XmlAccess.add_parameter_elems(portlet_clone_ci.preferences, [], portlet_clone_ci_elm)
-                XmlAccess.add_access_control_elm(portlet_clone_ci, portlet_clone_ci_elm)
+            XmlAccess.add_new_portlet_clones(portlet_app_elm, portlet_ci)
 
         # existing portlets
         for portlet_name in change_set.common_items:
