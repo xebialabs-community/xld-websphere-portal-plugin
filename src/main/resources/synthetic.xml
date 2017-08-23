@@ -27,7 +27,7 @@
         <property name="portletName" description="Name of the portlet (portlet-name) as described in the portlet.xml"/>
         <property name="uniqueName" description="Unique name for portlet" required="false"/>
         <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
-        <property name="clones" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneSpec" label="Clones" description="List of portlet clones to register."/>
+        <property name="clones" kind="set_of_ci" required="false" as-containment="true" referenced-type="wp.PortletCloneSpec" label="Clones" description="List of portlet clones to register."/>
 
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
                   description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
@@ -77,7 +77,7 @@
         <property name="portletName" description="Name of the portlet (portlet-name) as described in the portlet.xml"/>
         <property name="uniqueName" description="Unique name for portlet" required="false"/>
         <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
-        <property name="clones" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletClone" label="Clones" description="List of portlet clones to register."/>
+        <property name="clones" kind="set_of_ci" required="false" as-containment="true" referenced-type="wp.PortletClone" label="Clones" description="List of portlet clones to register."/>
 
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
                   description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
