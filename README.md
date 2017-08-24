@@ -71,21 +71,21 @@ The Portlet War (__wp.War__) configuration item can be defined in a deployment p
 | -------- | ----------- |
 | portalAppName | Name for the portal application | 
 | portalAppUid | Unique identifier for the portal application as defined in the portal.xml |
-| portalAppConcreteUid | Concrete Unique identifier for the portal application as defined in the portal.xml. Only __required__ for __IBM-API__ type portlets |
+| portalAppConcreteUid | Concrete Unique identifier for the portal application as defined in the portlet.xml. Only __required__ for __IBM-API__ type portlets |
          
-### Defining portlet configuration items ###
+### Defining portlets ###
 
 The portlets that are contained in the War are described using the __wp.PortletSpec__ type. This type is a child of the __wp.War__
 
 | Property | Description | 
 | -------- | ----------- |
-| portletName | Name of the portlet as described in the portal.xml |
+| portletName | Name of the portlet as described in the portlet.xml |
 | uniqueName | Unique name for portlet. e.g. com.xebialabs.WelcomePortlet. _Optional_|
 | preferences |Preferences for the portlet described as a key value map. _Optional_. |
 | userAclMapping | See _access permissions_ below. _Optional_. |
 | groupAclMapping | See _access permissions_ below. _Optional_. |
 
-#### Access permissions ####
+### Access permissions ###
 Portlet access permissions can be defined under the __Security__ tab. The permission can be captured for a _user_ or _user\_group_ as a key value map. The _key_ being the desired security level. The _value_ should container the desired subject ids delimited by a pipe (\|).
 Valid security levels are, 
 
@@ -97,6 +97,35 @@ Valid security levels are,
 * delegator
 * security administrator
 * administrator
+
+### Defining portlet clones ###
+
+Portlets which need to be cloned can be specified using the __wp.PortletCloneSpec__ type. This type is a child of __wp.PortletSpec__.
+A clone of a portlet is an instance of a portlet with it's own name and specifications like preferences. Therefore it needs some propterties of which some are like a normal portlet.
+
+| Property | Description | 
+| -------- | ----------- |
+| cloneName | Name of the clone which will be appended to the original name. e.g. portletName=welcome-portlet and cloneName = clone1 makes name welcome-portlet.$cloned.clone1 |
+| uniqueName | Unique name for portlet. e.g. com.xebialabs.WelcomePortlet. _Optional_|
+| preferences |Preferences for the portlet described as a key value map. _Optional_. |
+| userAclMapping | See _access permissions_ above. _Optional_. |
+| groupAclMapping | See _access permissions_ above. _Optional_. |
+| defaultLocale | A default locale which describes the portlet. Needs to be in the localedata list |
+| localedata | See _Locale data_ below |
+
+### Locale data ###  
+
+A portlet Clone needs like name and description, this can be specified using the __wp.PortletCloneLocaleDataSpec__ type. This type is a child of __wp.PortletCloneSpec__.
+For portlets this is normally stated in the portlet.xml, but for clones this needs to be added, as it is probably different then the original portlet.
+One locale needs to be setup, and be referred as default locale for the clone. All other locales are optional.
+
+| Property | Description | 
+| -------- | ----------- |
+| locale | The locale. e.g. en |
+| title | Portlet title in specified locale. |
+| description | Portlet descriptions in specified locale. _Optional_. |
+| keywords | Portlet keywords in specified locale. _Optional_. |
+
 
 ### Sample _deployit-manifest.xml_ ###
 
@@ -122,6 +151,27 @@ Valid security levels are,
           <groupAclMapping>
             <entry key="user">all authenticated portal users</entry>
           </groupAclMapping>
+          <clones>
+          <wp.PortletCloneSpec name="WelcomePortlet.war/WelcomePortlet/clonespec1">
+            <cloneName>clone1</cloneName>
+            <preferences>
+              <entry key="apref">apref_value_for_clone</entry>
+            </preferences>
+            <defaultlocale>en</defaultlocale>
+            <localedata>
+              <wp.PortletCloneLocaleDataSpec name="WelcomePortlet.war/WelcomePortlet/clonespec1/en">
+                <locale>en</locale>
+                <title>Welcome Portlet Clone</title>
+              </wp.PortletCloneLocaleDataSpec>
+            </localedata>
+            <userAclMapping>
+              <entry key="user">anonymous portal user</entry>
+            </userAclMapping>
+            <groupAclMapping>
+              <entry key="user">all authenticated portal users</entry>
+            </groupAclMapping>
+          </wp.PortletCloneSpec>
+        </clones>
         </wp.PortletSpec>
       </portlets>
     </wp.War>

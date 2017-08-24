@@ -32,7 +32,7 @@
             <jython>
                 <description expression="true">"Register portlets contained in %s with %s" % (deployed.name, deployed.container.name)</description>
                 <script>was/portal/war/register-portlets-for-war.py</script>
-                <order>72</order>
+                <order>76</order>
             </jython>
         </steps>
     </rule>
