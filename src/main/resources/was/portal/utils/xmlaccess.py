@@ -43,7 +43,7 @@ class ChangeSet(object):
 
 class XmlAccess(object):
 
-    REQUEST_XML = '<request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PortalConfig_1.4.xsd">' \
+    REQUEST_XML = '<request xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PortalConfig_6.1.0.xsd">' \
                   '<portal action="locate"></portal></request>'
 
     def __init__(self, exec_context, host, wp_home, wp_user, wp_password, wp_url):
@@ -154,16 +154,44 @@ class XmlAccess(object):
     @staticmethod
     def add_parameter_elems(new_prefs, remove_prefs, portlet_elm):
         for pref_key, pref_val in new_prefs.items():
-            param_elm = ET.SubElement(portlet_elm, "parameter", {"name": pref_key, "type": "string", "update": "set"})
-            param_elm.text = pref_val
+            param_elm = ET.SubElement(portlet_elm, "preferences", {"name": pref_key, "update": "set"})
+            value_elm = ET.SubElement(param_elm, "value")
+            value_elm.text = pref_val
 
         for pref_key in remove_prefs:
-            ET.SubElement(portlet_elm, "parameter", {"name": pref_key, "type": "string", "update": "remove"})
+            ET.SubElement(portlet_elm, "preferences", {"name": pref_key, "update": "remove"})
 
     @staticmethod
     def add_unique_name_attr(portlet, portlet_elm):
         if XmlAccess.not_empty(portlet.uniqueName):
             portlet_elm.set("uniquename", portlet.uniqueName)
+
+    @staticmethod
+    def add_servlets(deployed, web_app_elm):
+        for portlet_ci in deployed.portlets:
+            ET.SubElement(web_app_elm, 'servlet', {'action': "update", "active": "true", "remote-cache-dynamic": "false",
+                                                   "name": portlet_ci.portletName, "objectid": portlet_ci.portletName})
+
+    @staticmethod
+    def add_portlet_clones(portlet_app_elm, portlet_ci, common_items, portlet_object_ids):
+        # Loop all portlet clones clones
+        for portlet_clone_ci in portlet_ci.clones:
+            clone_name = portlet_ci.portletName + ".$cloned." + portlet_clone_ci.cloneName
+            if portlet_clone_ci.cloneName in common_items:
+                portlet_clone_ci_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "defaultlocale": portlet_clone_ci.defaultlocale, "name": clone_name, "servletref": portlet_ci.portletName, "objectid": portlet_object_ids[str(clone_name)]})
+            else:
+                portlet_clone_ci_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "defaultlocale": portlet_clone_ci.defaultlocale, "name": clone_name, "servletref": portlet_ci.portletName})
+
+            for localedata_ci in portlet_clone_ci.localedata:
+                # Add locale data
+                localedata_elm = ET.SubElement(portlet_clone_ci_elm, 'localedata', {'locale': localedata_ci.locale})
+                XmlAccess._add_text_elm(localedata_elm, 'title', localedata_ci.title)
+                XmlAccess._add_text_elm(localedata_elm, 'description', localedata_ci.description)
+                XmlAccess._add_text_elm(localedata_elm, 'keywords', localedata_ci.keywords)
+
+            XmlAccess.add_unique_name_attr(portlet_clone_ci, portlet_clone_ci_elm)
+            XmlAccess.add_parameter_elems(portlet_clone_ci.preferences, [], portlet_clone_ci_elm)
+            XmlAccess.add_access_control_elm(portlet_clone_ci, portlet_clone_ci_elm)
 
     @staticmethod
     def generate_register_portlets_xml(deployed, war_installation_location):
@@ -177,15 +205,22 @@ class XmlAccess(object):
         XmlAccess._add_text_elm(web_app_elm, "context-root", deployed.contextRoot)
         XmlAccess._add_text_elm(web_app_elm, "display-name", deployed.name)
 
+        # First add servlets needed for possible cloning
+        XmlAccess.add_servlets(deployed, web_app_elm)
+
+        # Create the portal-app
         uid = XmlAccess.get_webmod_uid(deployed)
         portlet_app_elm = ET.SubElement(web_app_elm, 'portlet-app',
                                         {'action': "update", "active": "true", "uid": uid, "name": deployed.portalAppName})
 
+        # Add all portlets
         for portlet_ci in deployed.portlets:
             portlet_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "name": portlet_ci.portletName})
             XmlAccess.add_unique_name_attr(portlet_ci, portlet_elm)
             XmlAccess.add_parameter_elems(portlet_ci.preferences, [], portlet_elm)
             XmlAccess.add_access_control_elm(portlet_ci, portlet_elm)
+
+            XmlAccess.add_portlet_clones(portlet_app_elm, portlet_ci, [], [])
 
         return ET.tostring(root, encoding="UTF-8")
 
@@ -202,19 +237,27 @@ class XmlAccess(object):
         XmlAccess._add_text_elm(web_app_elm, "context-root", deployed.contextRoot)
         XmlAccess._add_text_elm(web_app_elm, "display-name", deployed.name)
 
+        # First add servlets needed for possible cloning
+        XmlAccess.add_servlets(deployed, web_app_elm)
+
         uid = deployed.portalAppUid  # JSR-API
         if XmlAccess.not_empty(deployed.portalAppConcreteUid):
             uid = deployed.portalAppConcreteUid  # IBM-API
         portlet_app_elm = ET.SubElement(web_app_elm, 'portlet-app', {'action': "update", "active": "true", "objectid": portlet_object_ids['portlet_app_id'],
                                                                      "uid": uid, "name": deployed.portalAppName})
-
+        # new portlets
         for portlet_name in change_set.new_items:
             portlet_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "name": portlet_name})
+
+            #Find CI
             portlet_ci = [p for p in deployed.portlets if p.portletName == portlet_name][0]
             XmlAccess.add_unique_name_attr(portlet_ci, portlet_elm)
             XmlAccess.add_parameter_elems(portlet_ci.preferences, [], portlet_elm)
             XmlAccess.add_access_control_elm(portlet_ci, portlet_elm)
 
+            XmlAccess.add_portlet_clones(portlet_app_elm, portlet_ci, [], [])
+
+        # existing portlets
         for portlet_name in change_set.common_items:
             portlet_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "name": portlet_name,
                                                                      "objectid": portlet_object_ids[str(portlet_name)]})
@@ -224,6 +267,19 @@ class XmlAccess(object):
             pref_changeset = ChangeSet.create(portlet_ci.preferences.keys(), previous_portlet_ci.preferences.keys())
             XmlAccess.add_parameter_elems(portlet_ci.preferences, pref_changeset.removed_items, portlet_elm)
             XmlAccess.add_access_control_elm(portlet_ci, portlet_elm, previous_portlet_ci)
+
+            # Create changeset
+            current_clone_cis = [c.cloneName for c in portlet_ci.clones]
+            previous_clone_cis = [c.cloneName for c in previous_portlet_ci.clones]
+            clones_change_set = ChangeSet.create(current_clone_cis, previous_clone_cis)
+            XmlAccess.add_portlet_clones(portlet_app_elm, portlet_ci, clones_change_set.common_items, portlet_object_ids)
+
+            # Loop through all old clones, remove ones which are not there anymore
+            for portlet_clone_name in clones_change_set.removed_items:
+                ET.SubElement(portlet_app_elm, 'portlet', {'action': "delete", "name": portlet_ci.portletName + ".$cloned." + portlet_clone_name})
+
+        for portlet_name in change_set.removed_items:
+            ET.SubElement(portlet_app_elm, 'portlet', {'action': "delete", "objectid": portlet_object_ids[str(portlet_name)]})
 
         return ET.tostring(root, encoding="UTF-8")
 
@@ -269,6 +325,7 @@ class XmlAccess(object):
 
         for portlet_elm in root.findall(".//portlet"):
             portlet_map[portlet_elm.get("name")] = portlet_elm.get("objectid")
+            self.log("portlet(clone) found: " + portlet_elm.get("name") + ", objectId: " + portlet_elm.get("objectid"))
 
         portlet_map['web_app_url'] = root.find(".//url").text
         portlet_map['portlet_app_id'] = root.find(".//portlet-app").get("objectid")
