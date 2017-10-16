@@ -72,6 +72,7 @@ The Portlet War (__wp.War__) configuration item can be defined in a deployment p
 | portalAppName | Name for the portal application | 
 | portalAppUid | Unique identifier for the portal application as defined in the portal.xml |
 | portalAppConcreteUid | Concrete Unique identifier for the portal application as defined in the portlet.xml. Only __required__ for __IBM-API__ type portlets |
+| disableDeregisterOnUninstall | Disables deregistration of portlets on uninstall of application. |
          
 ### Defining portlets ###
 
