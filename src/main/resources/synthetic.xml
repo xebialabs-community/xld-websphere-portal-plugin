@@ -20,7 +20,7 @@
         <property name="portalAppConcreteUid" required="false" label="Concrete Portal Application Identifier"
                   description="Required when deploying a IBM-API type portlet. Concrete Unique identifier for this portal application as defined in the portlet.xml"
                   category="Portal"/>
-        <property name="disableDeregisterOnUninstall" kind="boolean" required="true" label="Disable deregistration on uninstall"
+        <property name="disableDeregisterOnUninstall" required="false" label="Disable deregistration on uninstall"
                   description="In some usecases deregistration of portlets is not desired, especially when replacing one application with another one." default="false" category="Portal"/>
         <property name="portlets" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletSpec" label="Portlets" category="Portal"
                   description="List of portlets to register."/>
