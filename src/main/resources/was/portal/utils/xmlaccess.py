@@ -176,7 +176,12 @@ class XmlAccess(object):
     def add_portlet_clones(portlet_app_elm, portlet_ci, common_items, portlet_object_ids):
         # Loop all portlet clones clones
         for portlet_clone_ci in portlet_ci.clones:
-            clone_name = portlet_ci.portletName + ".$cloned." + portlet_clone_ci.cloneName
+            # Give possibility to fully specify a technical clone name
+            if "$cloned" in portlet_clone_ci.cloneName:
+                clone_name = portlet_clone_ci.cloneName
+            else:
+                clone_name = portlet_ci.portletName + ".$cloned." + portlet_clone_ci.cloneName
+
             if portlet_clone_ci.cloneName in common_items:
                 portlet_clone_ci_elm = ET.SubElement(portlet_app_elm, 'portlet', {'action': "update", "active": "true", "defaultlocale": portlet_clone_ci.defaultlocale, "name": clone_name, "servletref": portlet_ci.portletName, "objectid": portlet_object_ids[str(clone_name)]})
             else:

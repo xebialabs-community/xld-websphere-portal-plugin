@@ -41,6 +41,7 @@
         <conditions>
             <type>wp.WarModule</type>
             <operation>DESTROY</operation>
+            <expression>not delta.previous.disableDeregisterOnUninstall</expression>
         </conditions>
         <steps>
             <jython>
