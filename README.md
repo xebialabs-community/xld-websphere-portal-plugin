@@ -84,7 +84,7 @@ The portlets that are contained in the War are described using the __wp.PortletS
 | uniqueName | Unique name for portlet. e.g. com.xebialabs.WelcomePortlet. _Optional_|
 | preferences |Preferences for the portlet described as a key value map. _Optional_. |
 | clones | See _Defining portlet clones_ below. _Optional_. |
-| authLevel | The String representation of the associated auth level. Only used when step-up autentication is enabled. _Optional_. |
+| authLevel | The String representation of the associated auth level. Only used when step-up authentication is enabled. _Optional_. |
 | userAclMapping | See _access permissions_ below. _Optional_. |
 | groupAclMapping | See _access permissions_ below. _Optional_. |
 
@@ -113,7 +113,7 @@ A clone of a portlet is an instance of a portlet with it's own name and specific
 | preferences |Preferences for the portlet described as a key value map. _Optional_. |
 | defaultLocale | A default locale which describes the portlet. Needs to be in the localedata list |
 | localedata | See _Locale data_ below |
-| authLevel | The String representation of the associated auth level. Only used when step-up autentication is enabled. _Optional_. |
+| authLevel | The String representation of the associated auth level. Only used when step-up authentication is enabled. _Optional_. |
 | userAclMapping | See _access permissions_ above. _Optional_. |
 | groupAclMapping | See _access permissions_ above. _Optional_. |
 
