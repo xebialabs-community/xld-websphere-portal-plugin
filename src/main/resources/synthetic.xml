@@ -31,7 +31,7 @@
         <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
         <property name="clones" kind="set_of_ci" required="false" as-containment="true" referenced-type="wp.PortletCloneSpec" label="Clones" description="List of portlet clones to register."/>
 
-        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." required="false"/>
+        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." category="Security" required="false"/>
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
                   description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
             <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
@@ -48,7 +48,7 @@
         <property name="defaultlocale" description="Default locale, needs to be in the localedata list." required="true"/>
         <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleDataSpec" label="localedata" description="Locale data, one is mandetory and specified as default."/>
 
-        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." required="false"/>
+        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." category="Security" required="false"/>
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
                   description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
             <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
@@ -86,7 +86,7 @@
         <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
         <property name="clones" kind="set_of_ci" required="false" as-containment="true" referenced-type="wp.PortletClone" label="Clones" description="List of portlet clones to register."/>
 
-        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." required="false"/>
+        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." category="Security" required="false"/>
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
                   description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
             <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
@@ -106,7 +106,7 @@
         <property name="defaultlocale" description="Default locale, needs to be in the localedata list." required="true"/>
         <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleData" label="localedata" description="Locale data, one is mandetory and specified as default."/>
 
-        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." required="false"/>
+        <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." category="Security" required="false"/>
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
                   description="List of User ACL mappings of this portlet. Keyed by security level. Value are the subject ids delimited by |. Valid roles are user,privileged user,contributor,editor,manager,delegator,security administrator and administrator">
             <rule type="map-key-regex" pattern="user|privileged user|contributor|editor|manager|delegator|security administrator|administrator"/>
