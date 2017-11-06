@@ -137,6 +137,10 @@ class XmlAccess(object):
             return
 
         access_control_elm = ET.SubElement(portlet_elm, "access-control")
+
+        if portlet.authLevel:
+            access_control_elm.set("auth-level", portlet.authLevel)
+
         # unmap removed levels
         for level in change_set.removed_items:
             ET.SubElement(access_control_elm, "role", {"actionset": level, "update": "remove"})
