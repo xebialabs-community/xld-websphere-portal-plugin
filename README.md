@@ -72,6 +72,7 @@ The Portlet War (__wp.War__) configuration item can be defined in a deployment p
 | portalAppName | Name for the portal application | 
 | portalAppUid | Unique identifier for the portal application as defined in the portal.xml |
 | portalAppConcreteUid | Concrete Unique identifier for the portal application as defined in the portlet.xml. Only __required__ for __IBM-API__ type portlets |
+| disableDeregisterOnUninstall | Disables deregistration of portlets on uninstall of application. |
          
 ### Defining portlets ###
 
@@ -105,7 +106,7 @@ A clone of a portlet is an instance of a portlet with it's own name and specific
 
 | Property | Description | 
 | -------- | ----------- |
-| cloneName | Name of the clone which will be appended to the original name. e.g. portletName=welcome-portlet and cloneName = clone1 makes name welcome-portlet.$cloned.clone1 |
+| cloneName | A clone name needs $cloned in the name. If you fully specify the clone name here e.g. welcomePortlet.$cloned.clone1 then it will be used. If only a simple name is used then a full name is generate with portletName and this name, e.g. portletName=welcome-portlet and cloneName = clone1 makes name welcome-portlet.$cloned.clone1. |
 | uniqueName | Unique name for portlet. e.g. com.xebialabs.WelcomePortlet. _Optional_|
 | preferences |Preferences for the portlet described as a key value map. _Optional_. |
 | userAclMapping | See _access permissions_ above. _Optional_. |
