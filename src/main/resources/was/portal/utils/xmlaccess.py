@@ -129,18 +129,7 @@ class XmlAccess(object):
         add_subject_mapping(user_change_set, "user")
 
     @staticmethod
-    def add_access_control_elm(portlet, portlet_elm, previous_portlet=None):
-        security_levels = XmlAccess.consolidate_security_levels(portlet)
-        previous_security_levels = XmlAccess.consolidate_security_levels(previous_portlet)
-        change_set = ChangeSet.create(security_levels.keys(), previous_security_levels.keys())
-        if not change_set.has_items():
-            return
-
-        access_control_elm = ET.SubElement(portlet_elm, "access-control")
-
-        if portlet.authLevel:
-            access_control_elm.set("auth-level", portlet.authLevel)
-
+    def add_role_elm(access_control_elm, change_set, portlet, previous_security_levels, security_levels):
         # unmap removed levels
         for level in change_set.removed_items:
             ET.SubElement(access_control_elm, "role", {"actionset": level, "update": "remove"})
@@ -154,6 +143,22 @@ class XmlAccess(object):
         for level in change_set.common_items:
             role_elm = ET.SubElement(access_control_elm, "role", {"actionset": level, "update": "set"})
             XmlAccess.add_role_mapping_elm(security_levels[level], previous_security_levels[level], role_elm, portlet.subjectDelimiter)
+
+    @staticmethod
+    def add_access_control_elm(portlet, portlet_elm, previous_portlet=None):
+        security_levels = XmlAccess.consolidate_security_levels(portlet)
+        previous_security_levels = XmlAccess.consolidate_security_levels(previous_portlet)
+        change_set = ChangeSet.create(security_levels.keys(), previous_security_levels.keys())
+        if not change_set.has_items():
+            return
+
+        access_control_elm = ET.SubElement(portlet_elm, "access-control")
+
+        # add step up authentication level if specified
+        if portlet.authLevel:
+            access_control_elm.set("auth-level", portlet.authLevel)
+
+        XmlAccess.add_role_elm(access_control_elm, change_set, portlet, previous_security_levels, security_levels)
 
     @staticmethod
     def add_parameter_elems(new_prefs, remove_prefs, portlet_elm):
