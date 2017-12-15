@@ -60,8 +60,15 @@ class XmlAccess(object):
         self.host = host
 
     @staticmethod
-    def new_instance_from_container(exec_context, container, portalHost):
-        return XmlAccess(exec_context, portalHost, container.wpHome, container.wpAdminUsername, container.wpAdminPassword, container.wpConfigUrl)
+    def new_instance_from_container(exec_context, deployed):
+        if deployed.container.type == "was.Cluster" and deployed.container.portalHost:
+            container = deployed.container
+        else:
+            container = deployed.container.cell
+
+        print "Using settings from " + container + " to register XmlAccess"
+
+        return XmlAccess(exec_context, container.portalHost, container.wpHome, container.wpAdminUsername, container.wpAdminPassword, container.wpConfigUrl)
 
     @staticmethod
     def determine_war_installation_url(deployed):
