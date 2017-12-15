@@ -83,6 +83,8 @@ The portlets that are contained in the War are described using the __wp.PortletS
 | portletName | Name of the portlet as described in the portlet.xml |
 | uniqueName | Unique name for portlet. e.g. com.xebialabs.WelcomePortlet. _Optional_|
 | preferences |Preferences for the portlet described as a key value map. _Optional_. |
+| clones | See _Defining portlet clones_ below. _Optional_. |
+| authLevel | The String representation of the associated auth level. Only used when step-up authentication is enabled. _Optional_. |
 | userAclMapping | See _access permissions_ below. _Optional_. |
 | groupAclMapping | See _access permissions_ below. _Optional_. |
 
@@ -109,10 +111,11 @@ A clone of a portlet is an instance of a portlet with it's own name and specific
 | cloneName | A clone name needs $cloned in the name. If you fully specify the clone name here e.g. welcomePortlet.$cloned.clone1 then it will be used. If only a simple name is used then a full name is generate with portletName and this name, e.g. portletName=welcome-portlet and cloneName = clone1 makes name welcome-portlet.$cloned.clone1. |
 | uniqueName | Unique name for portlet. e.g. com.xebialabs.WelcomePortlet. _Optional_|
 | preferences |Preferences for the portlet described as a key value map. _Optional_. |
-| userAclMapping | See _access permissions_ above. _Optional_. |
-| groupAclMapping | See _access permissions_ above. _Optional_. |
 | defaultLocale | A default locale which describes the portlet. Needs to be in the localedata list |
 | localedata | See _Locale data_ below |
+| authLevel | The String representation of the associated auth level. Only used when step-up authentication is enabled. _Optional_. |
+| userAclMapping | See _access permissions_ above. _Optional_. |
+| groupAclMapping | See _access permissions_ above. _Optional_. |
 
 ### Locale data ###  
 
