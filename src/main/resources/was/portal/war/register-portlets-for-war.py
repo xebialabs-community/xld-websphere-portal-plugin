@@ -10,5 +10,5 @@
 
 from was.portal.utils.xmlaccess import XmlAccess
 
-xmlaccess = XmlAccess.new_instance_from_container(context, deployed.container.cell, deployed.container.cell.portalHost)
+xmlaccess = XmlAccess.new_instance_from_container(context, deployed)
 xmlaccess.register_portlets_for_war(deployed)

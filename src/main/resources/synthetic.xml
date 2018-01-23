@@ -20,7 +20,7 @@
         <property name="portalAppConcreteUid" required="false" label="Concrete Portal Application Identifier"
                   description="Required when deploying a IBM-API type portlet. Concrete Unique identifier for this portal application as defined in the portlet.xml"
                   category="Portal"/>
-        <property name="disableDeregisterOnUninstall"  required="false" label="Disable deregistration on uninstall"
+        <property name="disableDeregisterOnUninstall" required="false" label="Disable deregistration on uninstall"
                   description="In some usecases deregistration of portlets is not desired, especially when replacing one application with another one." default="false" category="Portal"/>
         <property name="portlets" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletSpec" label="Portlets" category="Portal"
                   description="List of portlets to register."/>
@@ -46,7 +46,8 @@
         <property name="uniqueName" description="Unique name for portlet" required="false"/>
         <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
         <property name="defaultlocale" description="Default locale, needs to be in the localedata list." required="true"/>
-        <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleDataSpec" label="localedata" description="Locale data, one is mandetory and specified as default."/>
+        <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleDataSpec" label="localedata"
+                  description="Locale data, one is mandetory and specified as default."/>
 
         <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." category="Security" required="false"/>
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
@@ -104,7 +105,8 @@
         <property name="uniqueName" description="Unique name for portlet" required="false"/>
         <property name="preferences" description="Portlet preferences." required="false" kind="map_string_string"/>
         <property name="defaultlocale" description="Default locale, needs to be in the localedata list." required="true"/>
-        <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleData" label="localedata" description="Locale data, one is mandetory and specified as default."/>
+        <property name="localedata" kind="set_of_ci" required="true" as-containment="true" referenced-type="wp.PortletCloneLocaleData" label="localedata"
+                  description="Locale data, one is mandetory and specified as default."/>
 
         <property name="authLevel" description="The String representation of the associated auth level. Only used when step-up autentication is enabled." category="Security" required="false"/>
         <property name="userAclMapping" kind="map_string_string" required="false" category="Security"
@@ -119,7 +121,8 @@
         <property name="subjectDelimiter" hidden="true" default="|"/>
     </type>
 
-    <type type="wp.PortletCloneLocaleData" extends="udm.BaseEmbeddedDeployed" deployable-type="wp.PortletCloneLocaleDataSpec" container-type="wp.PortletClone" description="Locales to give the portlet clone name and description. One is always needed.">
+    <type type="wp.PortletCloneLocaleData" extends="udm.BaseEmbeddedDeployed" deployable-type="wp.PortletCloneLocaleDataSpec" container-type="wp.PortletClone"
+          description="Locales to give the portlet clone name and description. One is always needed.">
         <property name="locale" description="locale of the name, description and keywords"/>
         <property name="title" description="Portlet title in specified locale" required="true"/>
         <property name="description" description="Portlet description in specified locale" required="false"/>
@@ -135,7 +138,7 @@
     </type>
 
     <type type="wp.ExecutedXmlAccessScriptPair" extends="udm.BaseDeployedArtifact" deployable-type="wp.XmlAccessScriptPair" container-type="was.WasAppContainer"
-            description="A folder containing 2 XmlAccess files that are used for deployment and rollback">
+          description="A folder containing 2 XmlAccess files that are used for deployment and rollback">
         <generate-deployable type="wp.XmlAccessScriptPair" extends="udm.BaseDeployableFolderArtifact"/>
         <property name="configUri" required="false" description="Uri to be appended to the wpConfigUrl defined on the container. Used when applying xmlaccess to a virtual portal"/>
         <property name="applyScript" description="Name of XmlAccess file in folder to execute on deployment"/>
@@ -144,26 +147,33 @@
 
     <!-- Containers -->
     <type-modification type="was.UnmanagedServer">
+        <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="false"/>
         <property name="wpHome" label="Installation location" description="Location of WebSphere Portal on the primary node." category="Portal" required="false"/>
+        <property name="wpProfileLocation" label="Portal Profile Home" description="The location of the portal profile." category="Portal" required="false"/>
+        <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
         <property name="wpAdminUsername" label="Administrative user" description="Username of the administrative user." category="Portal" required="false"/>
         <property name="wpAdminPassword" label="Administrative password" description="Password of the administrative user." category="Portal" required="false" password="true"/>
-        <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
-        <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="true"/>
-        <property name="wpProfileLocation" label="Portal Profile Home" description="The location of the portal war file." category="Portal" required="false"/>         
         <property name="installedAppDir" default="installedApps" hidden="true" description="The install applications directory under the profile" category="Portal"/>
     </type-modification>
 
     <type-modification type="was.DeploymentManager">
+        <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="false"/>
         <property name="wpHome" label="Installation location" description="Location of WebSphere Portal on the primary node." category="Portal" required="false"/>
+        <property name="wpProfileLocation" label="Portal Profile Home" description="The location of the portal profile." category="Portal" required="false"/>
+        <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
         <property name="wpAdminUsername" label="Administrative user" description="Username of the administrative user." category="Portal" required="false"/>
         <property name="wpAdminPassword" label="Administrative password" description="Password of the administrative user." category="Portal" required="false" password="true"/>
-        <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
-        <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="true"/>
-
-        <property name="wpProfileLocation" label="Portal Profile Home" description="The location of the portal war file." category="Portal" required="false"/>
-
         <property name="installedAppDir" default="installedApps" hidden="true" description="The install applications directory under the profile" category="Portal"/>
+    </type-modification>
 
+    <type-modification type="was.Cluster">
+        <property name="portalHost" kind="ci" referenced-type="overthere.Host" label="Portal Host" description="The host xml access is on." category="Portal" required="false"/>
+        <property name="wpHome" label="Installation location" description="Location of WebSphere Portal on the primary node of the cluster." category="Portal" required="false"/>
+        <property name="wpProfileLocation" label="Portal Profile Home" description="The location of the portal profile." category="Portal" required="false"/>
+        <property name="wpConfigUrl" label="Configuration URL" description="The URL of the WebSphere Portal configuration API." category="Portal" required="false"/>
+        <property name="wpAdminUsername" label="Administrative user" description="Username of the administrative user." category="Portal" required="false"/>
+        <property name="wpAdminPassword" label="Administrative password" description="Password of the administrative user." category="Portal" required="false" password="true"/>
+        <property name="installedAppDir" default="installedApps" hidden="true" description="The install applications directory under the profile" category="Portal"/>
     </type-modification>
 
 </synthetic>

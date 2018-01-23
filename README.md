@@ -53,15 +53,19 @@ Place the plugin XLDP file into __&lt;xld-home&gt;/plugins__ directory. Make sur
 
 ## Websphere Portal Connection Information ##
 
-This plugin adds configuration settings under the __Portal__ tab of the __was.DeploymentMananger__ and __was.UnmanagedServer__ configuration items. All properties are required.
+This plugin adds configuration settings under the __Portal__ tab of the __was.DeploymentManager__ and __was.Cluster__ for managed environments and in __was.UnmanagedServer__ for unmanaged environments. 
+If there are two or more different portal clusters defined in your environment, please specify the values in __was.Cluster__. If you do not have different portal clusters, than specifying it in __was.DeploymentManager__ should be sufficient.
+
+All properties are required.
 
 | Property | Description |
 | -------- | ----------- |
+| portalHost | The host xml access is on |
 | wpHome   | Location of WebSphere Portal on the primary node. e.g C:\IBM\WebSphere\PortalServer |
+| wpProfileLocation | The location of the portal profile |
+| wpConfigUrl | The URL of the WebSphere Portal configuration API. e.g http://localhost:10039/wps/config |
 | wpAdminUsername | Username of the administrative user |
 | wpAdminPassword | Password of the administrative user |
-| wpConfigUrl | The URL of the WebSphere Portal configuration API. e.g http://localhost:10039/wps/config |
-
 
 ## Deploying a Portlet War ##
 
