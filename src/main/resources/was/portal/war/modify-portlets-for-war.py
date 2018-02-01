@@ -1,5 +1,5 @@
 #
-# Copyright 2017 XEBIALABS
+# Copyright 2018 XEBIALABS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
@@ -10,5 +10,5 @@
 
 from was.portal.utils.xmlaccess import XmlAccess
 
-xmlaccess = XmlAccess.new_instance_from_container(context, deployed.container.cell, deployed.container.cell.portalHost)
+xmlaccess = XmlAccess.new_instance_from_container(context, deployed)
 xmlaccess.modify_portlets_for_war(deployed, previous_deployed)

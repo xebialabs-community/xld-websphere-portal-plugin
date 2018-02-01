@@ -1,5 +1,5 @@
 #
-# Copyright 2017 XEBIALABS
+# Copyright 2018 XEBIALABS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
@@ -60,8 +60,15 @@ class XmlAccess(object):
         self.host = host
 
     @staticmethod
-    def new_instance_from_container(exec_context, container, portalHost):
-        return XmlAccess(exec_context, portalHost, container.wpHome, container.wpAdminUsername, container.wpAdminPassword, container.wpConfigUrl)
+    def new_instance_from_container(exec_context, deployed):
+        if deployed.container.type == "was.Cluster" and deployed.container.portalHost:
+            container = deployed.container
+        else:
+            container = deployed.container.cell
+
+        print "Using settings from " + container + " to register XmlAccess"
+
+        return XmlAccess(exec_context, container.portalHost, container.wpHome, container.wpAdminUsername, container.wpAdminPassword, container.wpConfigUrl)
 
     @staticmethod
     def determine_war_installation_url(deployed):
