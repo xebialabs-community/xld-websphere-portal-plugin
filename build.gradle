@@ -63,7 +63,7 @@ configurations {
 
 dependencies {
   compile "com.xebialabs.deployit:udm-plugin-api:$apiVersion"
-  compile 'com.xebialabs.overthere:overtherepy:0.0.3'
+  compile 'com.xebialabs.overthere:overtherepy:0.0.4'
 
-  distBundle 'com.xebialabs.overthere:overtherepy:0.0.3'
+  distBundle 'com.xebialabs.overthere:overtherepy:0.0.4'
 }
